@@ -8,12 +8,7 @@ from sqlalchemy_utils import create_database, database_exists
 
 load_dotenv()
 
-DB_DATABASE = os.getenv('DB_DATABASE')
-DB_PASSWORD = os.getenv('DB_PASSWORD')
-DB_USER = os.getenv('DB_USER')
-DB_HOST = os.getenv('DB_HOST')
-
-SQLALCHEMY_DATABASE_URL = f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}/{DB_DATABASE}"
+SQLALCHEMY_DATABASE_URL = os.environ["DATABASE_URL"]
 
 
 def validate_database():
@@ -25,15 +20,22 @@ def validate_database():
         print("Database already exists")
 
 
+def _init_db(db_url):
+    engine = create_engine(db_url)
+    return sessionmaker(autocommit=False, autoflush=False, bind=engine)()
 
-engine = create_engine(SQLALCHEMY_DATABASE_URL)
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 Base = declarative_base()
 
-def get_db():
-    db = SessionLocal()
+
+def get_db(db_url=None):
+    if db_url is None:
+        db_url = SQLALCHEMY_DATABASE_URL
+    db = _init_db(db_url)
     try:
         yield db
-    except:
+    except Exception as exc:
+        print(exc)
+        raise
+    finally:
         db.close()
