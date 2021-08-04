@@ -6,18 +6,17 @@ from sqlalchemy import pool
 
 from alembic import context
 
+from dotenv import load_dotenv
+
+load_dotenv()
+
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
 
 # here we allow ourselves to pass interpolation vars to alembic.ini
 # fron the host .env
-section = config.config_ini_section
-config.set_section_option(section, "DB_USER", os.environ.get("DB_USER"))
-config.set_section_option(section, "DB_PASS", os.environ.get("DB_PASS"))
-config.set_section_option(section, "DB_HOST", os.environ.get("DB_HOST"))
-config.set_section_option(section, "DB_DATABASE", os.environ.get("DB_DATABASE"))
-config.set_section_option(section, "DATABASE_URL", os.environ.get("DATABASE_URL"))
+config.set_main_option("sqlalchemy.url", os.environ["DATABASE_URL"])
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.

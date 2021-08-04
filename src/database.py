@@ -9,11 +9,12 @@ from sqlalchemy_utils import create_database, database_exists
 load_dotenv()
 
 DB_DATABASE = os.getenv('DB_DATABASE')
-DB_PASSWORD = os.getenv('DB_PASSWORD') 
+DB_PASSWORD = os.getenv('DB_PASSWORD')
 DB_USER = os.getenv('DB_USER')
 DB_HOST = os.getenv('DB_HOST')
 
 SQLALCHEMY_DATABASE_URL = f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}/{DB_DATABASE}"
+
 
 def validate_database():
     engine = create_engine(SQLALCHEMY_DATABASE_URL)
