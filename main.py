@@ -1,8 +1,9 @@
 from fastapi import FastAPI, Depends
-from .schemas import CreateUser
 from sqlalchemy.orm import Session
-from .database import get_db
-from .models import User
+
+from database.db import get_db
+from models.users import User
+from schemas.users import CreateUser
 
 
 description = """
