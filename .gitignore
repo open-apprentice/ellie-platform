@@ -154,3 +154,5 @@ fabric.properties
 .pypirc
 
 /db_data
+
+test.db
