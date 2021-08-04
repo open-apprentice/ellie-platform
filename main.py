@@ -17,7 +17,7 @@ app = FastAPI(title="Ellie Teaching and Learning Platform", description=descript
               contact={"name": "Ellie Platform", "url": "https://ellieplatform.org/contact"},
               license_info={"name": "MIT", "url": "https://github.com/open-apprentice/ellie/blob/main/LICENSE"})
 
-@app.post("/user")
+@app.post("/user", status_code=201)
 def create(details: CreateUser, db: Session = Depends(get_db)):
     to_create = User(
         first_name=details.first_name,
