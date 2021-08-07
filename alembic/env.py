@@ -6,6 +6,9 @@ from sqlalchemy import pool
 
 from alembic import context
 
+# from models.users import User
+from models.courses import Course
+
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -26,7 +29,7 @@ fileConfig(config.config_file_name)
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-target_metadata = None
+target_metadata = [Course.metadata]
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
