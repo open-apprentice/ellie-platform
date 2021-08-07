@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Depends
+from fastapi.responses import HTMLResponse
 from sqlalchemy.orm import Session
 
 from database.db import get_db
@@ -9,13 +10,31 @@ from schemas.users import CreateUser
 description = """
 We are teachers and so Ellie is neither complicated nor simplistic.
 Ellie is just right so you can focus on teaching and your students.
-Discover Ellie a modern teaching and learning platform.
+Discover Ellie a modern teaching and learning platform. Return to the index page: <a href="http://localhost:8000/">Ellie</a>.
 """
 
 app = FastAPI(title="Ellie Teaching and Learning Platform", description=description, version="0.0.1",
               terms_of_service="https://ellieplatform.org/terms-and-conditions/",
               contact={"name": "Ellie Platform", "url": "https://ellieplatform.org/contact"},
               license_info={"name": "MIT", "url": "https://github.com/open-apprentice/ellie/blob/main/LICENSE"})
+
+@app.get('/', response_class=HTMLResponse)
+def index():
+    return """
+    <html>
+        <head>
+            <title>Ellie - Learning and Teaching Platform</title>
+        </head>
+        <body>
+            <h1>Ellie - Learning and Teaching Platform</h1>
+            <ul>
+                <li><a href="http://localhost:8000/docs">API Documentation</a></li>
+            </ul>
+        </body>
+    
+    </html>
+    """
+
 
 @app.post("/user", status_code=201)
 def create(details: CreateUser, db: Session = Depends(get_db)):
