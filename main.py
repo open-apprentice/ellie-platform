@@ -9,18 +9,20 @@ from models.courses import Course
 from schemas.users import CreateUser
 from schemas.courses import CreateCourse
 
-description = """
-We are teachers and so Ellie is neither complicated nor simplistic.
-Ellie is just right so you can focus on teaching and your students.
-Discover Ellie a modern teaching and learning platform. Return to the index page: <a href="http://localhost:8000/">Ellie</a>.
-"""
+from docs_config import docsettings as docs
 
-app = FastAPI(title="Ellie Teaching and Learning Platform", description=description, version="0.0.1",
-              terms_of_service="https://ellieplatform.org/terms-and-conditions/",
-              contact={"name": "Ellie Platform", "url": "https://ellieplatform.org/contact"},
-              license_info={"name": "MIT", "url": "https://github.com/open-apprentice/ellie/blob/main/LICENSE"})
+app = FastAPI(
+    title=docs.title, 
+    description=docs.description, 
+    openapi_tags=docs.openapi_tags, 
+    version=docs.version,
+    terms_of_service=docs.terms_of_service,
+    contact=docs.contact,
+    license_info=docs.license_info,
+    )
 
-@app.get('/', response_class=HTMLResponse)
+
+@app.get('/',  tags=['index'], response_class=HTMLResponse)
 def index():
     return """
     <html>
@@ -38,7 +40,7 @@ def index():
     """
 
 
-@app.post("/user", status_code=201)
+@app.post("/user", status_code=201, tags=["create-user"] )
 def create(details: CreateUser, db: Session = Depends(get_db)):
     to_create = User(
         first_name=details.first_name,
@@ -53,17 +55,17 @@ def create(details: CreateUser, db: Session = Depends(get_db)):
         "created_id": to_create.id
     }
 
-@app.get("/user")
+@app.get("/user", tags=["get-user"])
 def get_by_id(id: int, db: Session = Depends(get_db)):
     return db.query(User).filter(User.id == id).first()
 
-@app.delete("/user")
+@app.delete("/user", tags=["delete-user"])
 def delete(id: int, db: Session = Depends(get_db)):
     db.query(User).filter(User.id == id).delete()
     db.commit()
     return { "success": True}
 
-@app.post("/course", status_code=201)
+@app.post("/course", status_code=201, tags=["create-course"])
 def create(details: CreateCourse, db: Session = Depends(get_db)):
     to_create = Course(
         course_name=details.course_name,
@@ -81,11 +83,11 @@ def create(details: CreateCourse, db: Session = Depends(get_db)):
         "created_id": to_create.id
     }
 
-@app.get("/course")
+@app.get("/course", tags=["get-course"])
 def get_by_id(id: int, db: Session = Depends(get_db)):
     return db.query(Course).filter(Course.id == id).first()
 
-@app.delete("/course")
+@app.delete("/course", tags=["delete-course"])
 def delete(id: int, db: Session = Depends(get_db)):
     db.query(Course).filter(Course.id == id).delete()
     db.commit()
