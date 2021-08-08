@@ -5,6 +5,22 @@ from sqlalchemy.sql.schema import Column
 from database.db import Base
 
 
+class Author(Base):
+    __tablename__ = 'authors'
+    id = Column(Integer, primary_key=True)
+    created_courses = Column(String, nullable=True) # This is a placeholder for a list
+
+class Student(Base):
+    __tablename__ = 'students'
+    id = Column(Integer, primary_key=True)
+    enrolled_courses = Column(String, nullable=True) # This is a placeholder for a list
+
+class Admin(Base):    
+    __tablename__ = 'admins'
+    id = Column(Integer, primary_key=True)
+    permission_level = Column(Integer, default=1)
+
+
 class User(Base):
     __tablename__ = 'users'
 
