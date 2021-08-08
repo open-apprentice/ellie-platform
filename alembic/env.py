@@ -3,11 +3,9 @@ from logging.config import fileConfig
 
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
+import sqlalchemy_utils
 
 from alembic import context
-
-# from models.users import User
-from models.courses import Course
 
 from dotenv import load_dotenv
 
@@ -27,9 +25,12 @@ fileConfig(config.config_file_name)
 
 # add your model's MetaData object here
 # for 'autogenerate' support
-# from myapp import mymodel
+
+from models.users import Base as UserBase
+from models.courses import Base as CourseBase
+
 # target_metadata = mymodel.Base.metadata
-target_metadata = [Course.metadata]
+target_metadata = [UserBase.metadata, CourseBase.metadata]
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
@@ -75,9 +76,7 @@ def run_migrations_online():
     )
 
     with connectable.connect() as connection:
-        context.configure(
-            connection=connection, target_metadata=target_metadata
-        )
+        context.configure(connection=connection, target_metadata=target_metadata)
 
         with context.begin_transaction():
             context.run_migrations()

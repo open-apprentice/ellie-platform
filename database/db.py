@@ -15,7 +15,7 @@ def validate_database():
     engine = create_engine(SQLALCHEMY_DATABASE_URL)
     if not database_exists(engine.url):
         create_database(engine.url)
-        print("New Database Created"+database_exists(engine.url))
+        print("New Database Created" + database_exists(engine.url))
     else:
         print("Database already exists")
 
@@ -23,9 +23,6 @@ def validate_database():
 def _init_db(db_url):
     engine = create_engine(db_url)
     return sessionmaker(autocommit=False, autoflush=False, bind=engine)()
-
-
-Base = declarative_base()
 
 
 def get_db(db_url=None):

@@ -1,11 +1,14 @@
 from sqlalchemy import Integer, String, Boolean, Date
 from sqlalchemy.sql.schema import Column
 
-from database.db import Base
+from sqlalchemy.ext.declarative import declarative_base
+
+# from database.db import Base
+Base = declarative_base()
 
 
 class Course(Base):
-    __tablename__ = 'courses'
+    __tablename__ = "courses"
 
     id = Column(Integer, primary_key=True)
     course_name = Column(String, nullable=False)
@@ -15,8 +18,3 @@ class Course(Base):
     last_updated = Column(Date)
     author = Column(String, nullable=False)
     # course_sections = Column()
-    
-
-    
-    
-    
