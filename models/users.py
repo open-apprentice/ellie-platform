@@ -8,15 +8,17 @@ from sqlalchemy.ext.declarative import declarative_base
 Base = declarative_base()
 
 
-# class Author(Base):
-#     __tablename__ = 'authors'
-#     id = Column(Integer, primary_key=True)
-#     created_courses = Column(String, nullable=True) # This is a placeholder for a list
+class Author(Base):
+    __tablename__ = "authors"
+    id = Column(Integer, primary_key=True)
+    created_courses = Column(String, nullable=True)  # This is a placeholder for a list
 
-# class Student(Base):
-#     __tablename__ = 'students'
-#     id = Column(Integer, primary_key=True)
-#     enrolled_courses = Column(String, nullable=True) # This is a placeholder for a list
+
+class Student(Base):
+    __tablename__ = "students"
+    id = Column(Integer, primary_key=True)
+    enrolled_courses = Column(String, nullable=True)  # This is a placeholder for a list
+
 
 # class Admin(Base):
 #     __tablename__ = 'admins'
