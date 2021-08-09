@@ -25,6 +25,9 @@ def _init_db(db_url):
     return sessionmaker(autocommit=False, autoflush=False, bind=engine)()
 
 
+# Base = declarative_base()
+
+
 def get_db(db_url=None):
     if db_url is None:
         db_url = SQLALCHEMY_DATABASE_URL
