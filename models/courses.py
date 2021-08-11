@@ -8,7 +8,7 @@ Base = declarative_base()
 
 
 class CreateCourseSection(Base):
-    __tablename__ = "course-sections"
+    __tablename__ = "course_sections"
 
     id = Column(Integer, primary_key=True)
     course_section_name = Column(String, nullable=False)
@@ -23,9 +23,9 @@ class CreateCourseSection(Base):
     # QUESTION (Continue) This looks like the opposite of this: https://docs.sqlalchemy.org/en/14/orm/basic_relationships.html#many-to-one and I am confused... totally.
     # QUESTION: Should the below many to one relationship work? How do I test this?
     # QUESTION: How does the below relate to this: https://fastapi.tiangolo.com/tutorial/sql-databases/#create-the-relationships? Do I use `back_populates`?
-    course_id = Column(Integer, ForeignKey("courses.id"))
+    course_id = Column(Integer, ForeignKey("course.id"))
     # course = relationship("Course", backref="course-sections")
-    course = relationship("Course", back_populates="course-sections")
+    course = relationship("Course", back_populates="course_sections")
 
     # QUESTION: I ask this later, but should I be including this in the code? And how do I find out in english what this does? refering to def __init__?
     # def __init__(
@@ -57,7 +57,7 @@ class Course(Base):
     date_published = Column(Date)
     last_updated = Column(Date)
     author = Column(String, nullable=False)
-    course-sections = relationship("course-sections", back_populates="course")
+    course_sections = relationship("course_sections", back_populates="course")
     # This would have a list of all the CreateCourseSections that have been made and assigned to this course.
     # https://github.com/tiangolo/fastapi/issues/2194
     # created_course_sections = Column(???, nullable=True) ???

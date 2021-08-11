@@ -47,6 +47,6 @@ class User(Base):
     user_email = Column(EmailType, nullable=False)
 
     # Is this correct?
-    authors = relationship("Author", back_populates="users")
-    studentss = relationship("Student", back_populates="users")
+    authors = relationship("Author", back_populates="user")
+    students = relationship("Student", back_populates="user")
     # admins = relationship("Admin", back_populates="users")
