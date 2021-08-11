@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends, HTTPException
 from fastapi.responses import HTMLResponse
 from sqlalchemy.orm import Session
 
@@ -7,7 +7,9 @@ from database.db import get_db
 from models.users import User
 from models.courses import Course, CreateCourseSection
 from schemas.users import CreateUser
-from schemas.courses import CreateCourse, CreateCourseSection
+from schemas.courses import (CreateCourse,
+                             CreateCourseSectionPayload,
+                             CreateCourseSectionObject)
 
 from docs_config import docsettings as docs
 
@@ -94,8 +96,17 @@ def delete(id: int, db: Session = Depends(get_db)):
 
 
 @app.post("/course-section", status_code=201, tags=["create-course-section"])
-def create(details: CreateCourseSection, db: Session = Depends(get_db)):
-    to_create = CreateCourseSection(
+def create(details: CreateCourseSectionPayload, db: Session = Depends(get_db)):
+    course_ids = details.course_ids
+    courses = db.query(Course).filter(
+        Course.id.in_(course_ids)
+    ).all()
+    if not courses:
+        error = f"No courses found for course ids {course_ids}"
+        raise HTTPException(status_code=400, detail=error)
+
+    print(courses)
+    to_create = CreateCourseSectionObject(
         course_section_name=details.course_section_name,
         date_published=details.date_published,
         last_updated=details.last_updated,
@@ -103,6 +114,7 @@ def create(details: CreateCourseSection, db: Session = Depends(get_db)):
         course_section_is_complete=details.course_section_is_complete,
         course_section_purpose=details.course_section_purpose,
         course_section_order=details.course_section_order,
+        courses=courses
     )
     db.add(to_create)
     db.commit()
