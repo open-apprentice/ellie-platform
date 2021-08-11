@@ -35,7 +35,7 @@ def index():
                 <li><a href="http://localhost:8000/docs">API Documentation</a></li>
             </ul>
         </body>
-    
+
     </html>
     """
 
@@ -74,7 +74,7 @@ def create(details: CreateCourse, db: Session = Depends(get_db)):
         date_published=details.date_published,
         last_updated=details.last_updated,
         author=details.author,
-        # created_course_sections=details.created_course_sections,
+        course_sections=details.course_sections,
     )
     db.add(to_create)
     db.commit()

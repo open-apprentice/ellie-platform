@@ -23,6 +23,4 @@ class CreateCourse(BaseModel):
     date_published: date = None
     last_updated: date = None
     author: str
-    # This would have a list of all the CreateCourseSections that have been made and assigned to this course.
-    # https://github.com/tiangolo/fastapi/issues/2194
-    # created_course_sections: List[CreateCourseSection] = None
+    course_sections: List[CreateCourseSection] = []
