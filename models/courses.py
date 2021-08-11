@@ -7,7 +7,7 @@ from sqlalchemy.ext.declarative import declarative_base
 Base = declarative_base()
 
 
-association_table = Table('association', Base.metadata,
+course_sections_table = Table('course_sections_association', Base.metadata,
     Column('course_id', ForeignKey('course.id'), primary_key=True),
     Column('course_sections_id', ForeignKey('course_sections.id'), primary_key=True)
 )
@@ -25,7 +25,7 @@ class Course(Base):
     # TODO: make this foreign key to User table
     author = Column(String, nullable=False)
     course_sections = relationship("CreateCourseSection",
-                                   secondary=association_table,
+                                   secondary=course_sections_table,
                                    back_populates="courses")
 
 
@@ -41,5 +41,5 @@ class CreateCourseSection(Base):
     course_section_purpose = Column(String, nullable=False)
     course_section_order = Column(Integer, nullable=False)
     courses = relationship("Course",
-                           secondary=association_table,
+                           secondary=course_sections_table,
                            back_populates="course_sections")
