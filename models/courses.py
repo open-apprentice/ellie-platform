@@ -2,9 +2,7 @@ from sqlalchemy import Integer, String, Boolean, Date, Column, ForeignKey, Table
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql.schema import Column
 
-from sqlalchemy.ext.declarative import declarative_base
-
-Base = declarative_base()
+from database.db import Base
 
 
 course_sections_table = Table('course_sections_association', Base.metadata,
@@ -24,12 +22,12 @@ class Course(Base):
     last_updated = Column(Date)
     # TODO: make this foreign key to User table
     author = Column(String, nullable=False)
-    course_sections = relationship("CreateCourseSection",
+    course_sections = relationship("CourseSection",
                                    secondary=course_sections_table,
                                    back_populates="courses")
 
 
-class CreateCourseSection(Base):
+class CourseSection(Base):
     __tablename__ = "course_sections"
 
     id = Column(Integer, primary_key=True)

@@ -1,26 +1,7 @@
-from typing import Optional
+from pydantic_sqlalchemy import sqlalchemy_to_pydantic
 
-from pydantic import BaseModel
-from pydantic.networks import EmailStr
+from models.users import User, Author, Student
 
-
-class Author(BaseModel):
-    created_courses: str # This is a placeholder for a list
-
-
-class Student(BaseModel):
-    enrolled_courses: str # This is a placeholder for a list
-
-
-# class Admin(BaseModel):
-#     permission_level: int
-
-
-class CreateUser(BaseModel):
-    first_name: str
-    last_name: str
-    is_admin: bool
-    user_email: EmailStr
-    author: Optional[Author] = None
-    student: Optional[Student] = None
-    # Admin: Optional[Admin] = None
+PydanticUser = sqlalchemy_to_pydantic(User, exclude=["id"])
+PydanticAuthor = sqlalchemy_to_pydantic(Author, exclude=["id"])
+PydanticStudent = sqlalchemy_to_pydantic(Student, exclude=["id"])

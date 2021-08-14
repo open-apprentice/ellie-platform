@@ -9,6 +9,7 @@ from sqlalchemy_utils import create_database, database_exists
 load_dotenv()
 
 SQLALCHEMY_DATABASE_URL = os.environ["DATABASE_URL"]
+Base = declarative_base()
 
 
 def validate_database():
@@ -23,9 +24,6 @@ def validate_database():
 def _init_db(db_url):
     engine = create_engine(db_url)
     return sessionmaker(autocommit=False, autoflush=False, bind=engine)()
-
-
-# Base = declarative_base()
 
 
 def get_db(db_url=None):

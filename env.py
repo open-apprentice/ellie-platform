@@ -3,8 +3,10 @@ from logging.config import fileConfig
 
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
+import sqlalchemy_utils
 
 from alembic import context
+
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -12,6 +14,9 @@ load_dotenv()
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
+
+# here we allow ourselves to pass interpolation vars to alembic.ini
+# fron the host .env
 config.set_main_option("sqlalchemy.url", os.environ["DATABASE_URL"])
 
 # Interpret the config file for Python logging.
@@ -21,13 +26,10 @@ fileConfig(config.config_file_name)
 # add your model's MetaData object here
 # for 'autogenerate' support
 
-# need to both import Base and models: https://stackoverflow.com/a/62925227
 from database.db import Base
 
-from models.users import User, Author, Student
-from models.courses import Course, CourseSection
-
-target_metadata = Base.metadata
+# target_metadata = mymodel.Base.metadata
+target_metadata = [Base.metadata]
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
@@ -73,9 +75,7 @@ def run_migrations_online():
     )
 
     with connectable.connect() as connection:
-        context.configure(
-            connection=connection, target_metadata=target_metadata
-        )
+        context.configure(connection=connection, target_metadata=target_metadata)
 
         with context.begin_transaction():
             context.run_migrations()
