@@ -26,11 +26,10 @@ fileConfig(config.config_file_name)
 # add your model's MetaData object here
 # for 'autogenerate' support
 
-from models.users import Base as UserBase
-from models.courses import Base as CourseBase
+from database.db import Base
 
 # target_metadata = mymodel.Base.metadata
-target_metadata = [UserBase.metadata, CourseBase.metadata]
+target_metadata = [Base.metadata]
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
