@@ -2,9 +2,7 @@ from sqlalchemy import Integer, String, Boolean, Date, Column, ForeignKey, Table
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql.schema import Column
 
-from sqlalchemy.ext.declarative import declarative_base
-
-Base = declarative_base()
+from database.db import Base
 
 
 course_sections_table = Table('course_sections_association', Base.metadata,

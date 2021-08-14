@@ -3,10 +3,7 @@ from sqlalchemy.orm import relationship
 from sqlalchemy_utils import EmailType
 from sqlalchemy.sql.schema import Column, ForeignKey
 
-from sqlalchemy.ext.declarative import declarative_base
-
-# from database.db import Base
-Base = declarative_base()
+from database.db import Base
 
 
 class Author(Base):
