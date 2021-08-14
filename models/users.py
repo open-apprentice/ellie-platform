@@ -14,6 +14,8 @@ class User(Base):
     last_name = Column(String, nullable=False)
     is_admin = Column(Boolean, default=False)
     user_email = Column(EmailType, nullable=False)
+    authors = relationship("Author", back_populates="user")
+    students = relationship("Student", back_populates="user")
 
 
 class Author(Base):
