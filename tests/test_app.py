@@ -5,12 +5,13 @@ from sqlalchemy.orm import sessionmaker
 
 from database.db import get_db, Base
 from main import app
-from schemas.users import CreateUser
 
 SQLALCHEMY_DATABASE_URL = "sqlite:///./test.db"
 
-engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False})
-TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+engine = create_engine(SQLALCHEMY_DATABASE_URL,
+                       connect_args={"check_same_thread": False})
+TestingSessionLocal = sessionmaker(autocommit=False,
+                                   autoflush=False, bind=engine)
 
 
 def override_get_db():
@@ -41,8 +42,6 @@ def test_create_user(client):
         "user_email": "user@example.com",
     }
     response = client.post("/user", json=payload)
-    print(response)
-    breakpoint()
     assert response.status_code == 201
     expected = {"success": True, "created_id": 1}
     assert response.json() == expected
