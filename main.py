@@ -5,11 +5,11 @@ from sqlalchemy.orm import Session
 from database.db import get_db
 
 from models.users import User
-from models.courses import Course, CreateCourseSection
+from models.courses import Course, CourseSection
 from schemas.users import CreateUser
 from schemas.courses import (CreateCourse,
-                             CreateCourseSectionPayload,
-                             CreateCourseSectionObject)
+                             CourseSectionPayload,
+                             CourseSectionObject)
 
 from docs_config import docsettings as docs
 
@@ -96,7 +96,7 @@ def delete(id: int, db: Session = Depends(get_db)):
 
 
 @app.post("/course-section", status_code=201, tags=["create-course-section"])
-def create(details: CreateCourseSectionPayload, db: Session = Depends(get_db)):
+def create(details: CourseSectionPayload, db: Session = Depends(get_db)):
     course_ids = details.course_ids
     courses = db.query(Course).filter(
         Course.id.in_(course_ids)
@@ -106,7 +106,7 @@ def create(details: CreateCourseSectionPayload, db: Session = Depends(get_db)):
         raise HTTPException(status_code=400, detail=error)
 
     print(courses)
-    to_create = CreateCourseSectionObject(
+    to_create = CourseSectionObject(
         course_section_name=details.course_section_name,
         date_published=details.date_published,
         last_updated=details.last_updated,
@@ -123,11 +123,11 @@ def create(details: CreateCourseSectionPayload, db: Session = Depends(get_db)):
 
 @app.get("/course-section", tags=["get-course-section"])
 def get_by_id(id: int, db: Session = Depends(get_db)):
-    return db.query(CreateCourseSection).filter(CreateCourseSection.id == id).first()
+    return db.query(CourseSection).filter(CourseSection.id == id).first()
 
 
 @app.delete("/course-section", tags=["delete-course-section"])
 def delete(id: int, db: Session = Depends(get_db)):
-    db.query(CreateCourseSection).filter(CreateCourseSection.id == id).delete()
+    db.query(CourseSection).filter(CourseSection.id == id).delete()
     db.commit()
     return {"success": True}

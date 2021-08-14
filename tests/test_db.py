@@ -2,7 +2,7 @@ from datetime import datetime
 
 import pytest
 
-from models.courses import Course, CreateCourseSection
+from models.courses import Course, CourseSection
 
 
 @pytest.fixture(scope="session", autouse=True)
@@ -31,28 +31,28 @@ def courses(session):
 @pytest.fixture(scope="session", autouse=True)
 def sections(session):
     sections = [
-        CreateCourseSection(
+        CourseSection(
             course_section_name="datetimes",
             date_published=datetime.now(),
             last_updated=datetime.now(),
             course_section_purpose="work with datetimes",
             course_section_order=1,
             courses=[]),
-        CreateCourseSection(
+        CourseSection(
             course_section_name="itertools",
             date_published=datetime.now(),
             last_updated=datetime.now(),
             course_section_purpose="write functional code",
             course_section_order=2,
             courses=[]),
-        CreateCourseSection(
+        CourseSection(
             course_section_name="pytest",
             date_published=datetime.now(),
             last_updated=datetime.now(),
             course_section_purpose="write unit tests",
             course_section_order=3,
             courses=[]),
-        CreateCourseSection(
+        CourseSection(
             course_section_name="selenium",
             date_published=datetime.now(),
             last_updated=datetime.now(),
@@ -70,12 +70,12 @@ def test_create_courses(session):
 
 
 def test_create_sections(session):
-    assert session.query(CreateCourseSection).count() == 4
+    assert session.query(CourseSection).count() == 4
 
 
 def test_assoc_relation_course_sections(session):
     first_course, second_course = session.query(Course).all()
-    sections = session.query(CreateCourseSection).all()
+    sections = session.query(CourseSection).all()
     first_course.course_sections = sections[:2]
     second_course.course_sections = sections[2:]
     session.add(first_course)

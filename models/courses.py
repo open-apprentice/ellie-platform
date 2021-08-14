@@ -22,12 +22,12 @@ class Course(Base):
     last_updated = Column(Date)
     # TODO: make this foreign key to User table
     author = Column(String, nullable=False)
-    course_sections = relationship("CreateCourseSection",
+    course_sections = relationship("CourseSection",
                                    secondary=course_sections_table,
                                    back_populates="courses")
 
 
-class CreateCourseSection(Base):
+class CourseSection(Base):
     __tablename__ = "course_sections"
 
     id = Column(Integer, primary_key=True)

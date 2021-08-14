@@ -39,7 +39,13 @@ def test_create_user(client):
         "is_admin": True,
         "user_email": "user@example.com",
     }
+
+    breakpoint()
     response = client.post("/user", json=payload)
     assert response.status_code == 201
     expected = {"success": True, "created_id": 1}
     assert response.json() == expected
+
+
+def test_create_course(client):
+    pass

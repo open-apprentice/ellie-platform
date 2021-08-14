@@ -13,7 +13,7 @@ class Course(BaseModel):
     author: str
 
 
-class CreateCourseSectionBase(BaseModel):
+class CourseSectionBase(BaseModel):
     course_section_name: str
     date_published: date = None
     last_updated: date = None
@@ -23,15 +23,15 @@ class CreateCourseSectionBase(BaseModel):
     course_section_order: int
 
 
-class CreateCourseSectionPayload(CreateCourseSectionBase):
+class CourseSectionPayload(CourseSectionBase):
     """How we call the FastAPI endpoint"""
     course_ids: List[int]
 
 
-class CreateCourseSectionObject(CreateCourseSectionBase):
+class CourseSectionObject(CourseSectionBase):
     """How we create the SA object"""
     courses: List[Course]
 
 
 class CreateCourse(Course):
-    course_sections: List[CreateCourseSectionBase] = []
+    course_sections: List[CourseSectionBase] = []
