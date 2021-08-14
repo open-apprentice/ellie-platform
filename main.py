@@ -54,12 +54,12 @@ def create_user(details: PydanticUser, db: Session = Depends(get_db)):
     return {"success": True, "created_id": user.id}
 
 
-@app.get("/user", tags=["get-user"])
+@app.get("/user/{id}", tags=["get-user"])
 def get_user_by_id(id: int, db: Session = Depends(get_db)):
     return db.query(User).filter(User.id == id).first()
 
 
-@app.delete("/user", tags=["delete-user"])
+@app.delete("/user/{id}", status_code=204, tags=["delete-user"])
 def delete_user(id: int, db: Session = Depends(get_db)):
     db.query(User).filter(User.id == id).delete()
     db.commit()
