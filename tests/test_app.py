@@ -5,6 +5,7 @@ from sqlalchemy.orm import sessionmaker
 
 from database.db import get_db, Base
 from main import app
+from schemas.users import CreateUser
 
 SQLALCHEMY_DATABASE_URL = "sqlite:///./test.db"
 
@@ -39,9 +40,9 @@ def test_create_user(client):
         "is_admin": True,
         "user_email": "user@example.com",
     }
-
-    breakpoint()
     response = client.post("/user", json=payload)
+    print(response)
+    breakpoint()
     assert response.status_code == 201
     expected = {"success": True, "created_id": 1}
     assert response.json() == expected

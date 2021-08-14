@@ -8,8 +8,7 @@ from database.db import Base
 
 class User(Base):
     __tablename__ = "users"
-
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, index=True)
     first_name = Column(String, nullable=False)
     last_name = Column(String, nullable=False)
     is_admin = Column(Boolean, default=False)
@@ -20,7 +19,7 @@ class User(Base):
 
 class Author(Base):
     __tablename__ = "authors"
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, index=True)
     created_courses = Column(String, nullable=True)
     user_id = Column(Integer, ForeignKey("users.id"))
     user = relationship("User", back_populates="authors")
@@ -28,7 +27,7 @@ class Author(Base):
 
 class Student(Base):
     __tablename__ = "students"
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, index=True)
     enrolled_courses = Column(String, nullable=True)
     user_id = Column(Integer, ForeignKey("users.id"))
     user = relationship("User", back_populates="students")

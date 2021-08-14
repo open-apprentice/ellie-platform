@@ -1,37 +1,6 @@
-from typing import List
+from pydantic_sqlalchemy import sqlalchemy_to_pydantic
 
-from datetime import date
-from pydantic import BaseModel
+from models.courses import Course, CourseSection
 
-
-class Course(BaseModel):
-    course_name: str
-    is_draft: bool
-    is_published: bool
-    date_published: date = None
-    last_updated: date = None
-    author: str
-
-
-class CourseSectionBase(BaseModel):
-    course_section_name: str
-    date_published: date = None
-    last_updated: date = None
-    course_section_is_draft: bool
-    course_section_is_complete: bool
-    course_section_purpose: str
-    course_section_order: int
-
-
-class CourseSectionPayload(CourseSectionBase):
-    """How we call the FastAPI endpoint"""
-    course_ids: List[int]
-
-
-class CourseSectionObject(CourseSectionBase):
-    """How we create the SA object"""
-    courses: List[Course]
-
-
-class CreateCourse(Course):
-    course_sections: List[CourseSectionBase] = []
+PydanticCourse = sqlalchemy_to_pydantic(Course, exclude=["id"])
+PydanticCourseSection = sqlalchemy_to_pydantic(CourseSection, exclude=["id"])

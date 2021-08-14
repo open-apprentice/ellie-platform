@@ -6,10 +6,9 @@ from database.db import get_db
 
 from models.users import User
 from models.courses import Course, CourseSection
-from schemas.users import CreateUser
-from schemas.courses import (CreateCourse,
-                             CourseSectionPayload,
-                             CourseSectionObject)
+from schemas.users import PydanticUser
+from schemas.courses import (PydanticCourse,
+                             PydanticCourseSection)
 
 from docs_config import docsettings as docs
 
@@ -39,37 +38,37 @@ def index():
         </body>
 
     </html>
-    """
+    """  # noqa E501
 
 
 @app.post("/user", status_code=201, tags=["create-user"])
-def create(details: CreateUser, db: Session = Depends(get_db)):
-    to_create = User(
+def create_user(details: PydanticUser, db: Session = Depends(get_db)):
+    user = User(
         first_name=details.first_name,
         last_name=details.last_name,
         is_admin=details.is_admin,
         user_email=details.user_email,
     )
-    db.add(to_create)
+    db.add(user)
     db.commit()
-    return {"success": True, "created_id": to_create.id}
+    return {"success": True, "created_id": user.id}
 
 
 @app.get("/user", tags=["get-user"])
-def get_by_id(id: int, db: Session = Depends(get_db)):
+def get_user_by_id(id: int, db: Session = Depends(get_db)):
     return db.query(User).filter(User.id == id).first()
 
 
 @app.delete("/user", tags=["delete-user"])
-def delete(id: int, db: Session = Depends(get_db)):
+def delete_user(id: int, db: Session = Depends(get_db)):
     db.query(User).filter(User.id == id).delete()
     db.commit()
     return {"success": True}
 
 
 @app.post("/course", status_code=201, tags=["create-course"])
-def create(details: CreateCourse, db: Session = Depends(get_db)):
-    to_create = Course(
+def create_course(details: PydanticCourse, db: Session = Depends(get_db)):
+    course = Course(
         course_name=details.course_name,
         is_draft=details.is_draft,
         is_published=details.is_published,
@@ -78,25 +77,26 @@ def create(details: CreateCourse, db: Session = Depends(get_db)):
         author=details.author,
         course_sections=details.course_sections,
     )
-    db.add(to_create)
+    db.add(course)
     db.commit()
-    return {"success": True, "created_id": to_create.id}
+    return {"success": True, "created_id": course.id}
 
 
 @app.get("/course", tags=["get-course"])
-def get_by_id(id: int, db: Session = Depends(get_db)):
+def get_course_by_id(id: int, db: Session = Depends(get_db)):
     return db.query(Course).filter(Course.id == id).first()
 
 
 @app.delete("/course", tags=["delete-course"])
-def delete(id: int, db: Session = Depends(get_db)):
+def delete_course(id: int, db: Session = Depends(get_db)):
     db.query(Course).filter(Course.id == id).delete()
     db.commit()
     return {"success": True}
 
 
 @app.post("/course-section", status_code=201, tags=["create-course-section"])
-def create(details: CourseSectionPayload, db: Session = Depends(get_db)):
+def create_course_section(details: PydanticCourseSection,
+                          db: Session = Depends(get_db)):
     course_ids = details.course_ids
     courses = db.query(Course).filter(
         Course.id.in_(course_ids)
@@ -105,8 +105,7 @@ def create(details: CourseSectionPayload, db: Session = Depends(get_db)):
         error = f"No courses found for course ids {course_ids}"
         raise HTTPException(status_code=400, detail=error)
 
-    print(courses)
-    to_create = CourseSectionObject(
+    course = CourseSection(
         course_section_name=details.course_section_name,
         date_published=details.date_published,
         last_updated=details.last_updated,
@@ -116,18 +115,18 @@ def create(details: CourseSectionPayload, db: Session = Depends(get_db)):
         course_section_order=details.course_section_order,
         courses=courses
     )
-    db.add(to_create)
+    db.add(course)
     db.commit()
-    return {"success": True, "created_id": to_create.id}
+    return {"success": True, "created_id": course.id}
 
 
 @app.get("/course-section", tags=["get-course-section"])
-def get_by_id(id: int, db: Session = Depends(get_db)):
+def get_course_section_by_id(id: int, db: Session = Depends(get_db)):
     return db.query(CourseSection).filter(CourseSection.id == id).first()
 
 
 @app.delete("/course-section", tags=["delete-course-section"])
-def delete(id: int, db: Session = Depends(get_db)):
+def delete_course_section(id: int, db: Session = Depends(get_db)):
     db.query(CourseSection).filter(CourseSection.id == id).delete()
     db.commit()
     return {"success": True}
