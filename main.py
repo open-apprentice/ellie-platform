@@ -56,7 +56,11 @@ def create_user(details: PydanticUser, db: Session = Depends(get_db)):
 
 @app.get("/user/{id}", tags=["get-user"])
 def get_user_by_id(id: int, db: Session = Depends(get_db)):
-    return db.query(User).filter(User.id == id).first()
+    user = db.query(User).filter(User.id == id).first()
+    if user is None:
+        error = f"No user account found for user id {id}"
+        raise HTTPException(status_code=404, detail=error)
+    return user
 
 
 @app.delete("/user/{id}", status_code=204, tags=["delete-user"])
@@ -75,19 +79,22 @@ def create_course(details: PydanticCourse, db: Session = Depends(get_db)):
         date_published=details.date_published,
         last_updated=details.last_updated,
         author=details.author,
-        course_sections=details.course_sections,
     )
     db.add(course)
     db.commit()
     return {"success": True, "created_id": course.id}
 
 
-@app.get("/course", tags=["get-course"])
+@app.get("/course/{id}", tags=["get-course"])
 def get_course_by_id(id: int, db: Session = Depends(get_db)):
-    return db.query(Course).filter(Course.id == id).first()
+    course = db.query(Course).filter(Course.id == id).first()
+    if course is None:
+        error = f"No course found for id {id}"
+        raise HTTPException(status_code=404, detail=error)
+    return course
 
 
-@app.delete("/course", tags=["delete-course"])
+@app.delete("/course/{id}", status_code=204, tags=["delete-course"])
 def delete_course(id: int, db: Session = Depends(get_db)):
     db.query(Course).filter(Course.id == id).delete()
     db.commit()
@@ -97,15 +104,7 @@ def delete_course(id: int, db: Session = Depends(get_db)):
 @app.post("/course-section", status_code=201, tags=["create-course-section"])
 def create_course_section(details: PydanticCourseSection,
                           db: Session = Depends(get_db)):
-    course_ids = details.course_ids
-    courses = db.query(Course).filter(
-        Course.id.in_(course_ids)
-    ).all()
-    if not courses:
-        error = f"No courses found for course ids {course_ids}"
-        raise HTTPException(status_code=400, detail=error)
-
-    course = CourseSection(
+    course_section = CourseSection(
         course_section_name=details.course_section_name,
         date_published=details.date_published,
         last_updated=details.last_updated,
@@ -113,19 +112,22 @@ def create_course_section(details: PydanticCourseSection,
         course_section_is_complete=details.course_section_is_complete,
         course_section_purpose=details.course_section_purpose,
         course_section_order=details.course_section_order,
-        courses=courses
     )
-    db.add(course)
+    db.add(course_section)
     db.commit()
-    return {"success": True, "created_id": course.id}
+    return {"success": True, "created_id": course_section.id}
 
 
-@app.get("/course-section", tags=["get-course-section"])
+@app.get("/course-section/{id}", tags=["get-course-section"])
 def get_course_section_by_id(id: int, db: Session = Depends(get_db)):
-    return db.query(CourseSection).filter(CourseSection.id == id).first()
+    course_section = db.query(CourseSection).filter(CourseSection.id == id).first()
+    if course_section is None:
+        error = f"No course section found for id {id}"
+        raise HTTPException(status_code=404, detail=error)
+    return course_section
 
 
-@app.delete("/course-section", tags=["delete-course-section"])
+@app.delete("/course-section/{id}", status_code=204, tags=["delete-course-section"])
 def delete_course_section(id: int, db: Session = Depends(get_db)):
     db.query(CourseSection).filter(CourseSection.id == id).delete()
     db.commit()
