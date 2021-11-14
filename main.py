@@ -74,7 +74,7 @@ def create(details: CreateCourse, db: Session = Depends(get_db)):
         date_published=details.date_published,
         last_updated=details.last_updated,
         author=details.author,
-        created_course_sections=details.created_course_sections,
+        # created_course_sections=details.created_course_sections,
     )
     db.add(to_create)
     db.commit()

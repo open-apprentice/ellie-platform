@@ -13,6 +13,7 @@ class CreateCourseSection(BaseModel):
     course_section_purpose: str
     course_section_order: int
     # This needs a way to assign to a specific course
+    # QUESTION: How to create a many to one relationship that syncs with the sqlalchemy engine?
 
 
 class CreateCourse(BaseModel):
